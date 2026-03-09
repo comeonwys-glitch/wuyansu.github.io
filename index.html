@@ -771,53 +771,67 @@
         });
     </script>
     
-    <script>
-// 确保数组里是3张不同的有效Raw链接
-const images = [
+   <script>
+// ========== 专属：素材案例图集弹窗逻辑 ==========
+// 1. 这里放你素材案例图集的3张图 Raw 链接
+const galleryImages = [
   "https://raw.githubusercontent.com/comeonwys-glitch/wuyansu.github.io/main/images/素材案例图集/集团分享.jpg",
   "https://raw.githubusercontent.com/comeonwys-glitch/wuyansu.github.io/main/images/素材案例图集/24年销冠证书.jpg",
   "https://raw.githubusercontent.com/comeonwys-glitch/wuyansu.github.io/main/images/素材案例图集/25年数字营销师-巨量千川（初级）.jpg"
 ];
 
-let currentImgIndex = 0;
-// 等待页面完全加载后再绑定事件（解决找不到元素的问题）
+// 2. 等待页面加载完成
 document.addEventListener("DOMContentLoaded", function() {
+  // 3. 获取页面元素（严格对应你HTML里的ID）
+  const openGalleryBtn = document.getElementById("open-gallery-btn"); // 你的查看合集按钮
   const modal = document.getElementById("imageModal");
   const modalImg = document.getElementById("modalImage");
-  const openBtn = document.getElementById("open-gallery-btn");
   const closeBtn = document.getElementById("closeModal");
   const prevBtn = document.getElementById("prevImg");
   const nextBtn = document.getElementById("nextImg");
+  
+  let currentIndex = 0;
 
-  // 打开弹窗（强制显示第一张）
-  openBtn.addEventListener("click", () => {
-    currentImgIndex = 0;
-    modalImg.src = images[currentImgIndex];
-    modal.classList.add("active");
-  });
+  // 4. 核心：监听「查看合集」按钮点击
+  if (openGalleryBtn) {
+    openGalleryBtn.addEventListener("click", function() {
+      currentIndex = 0; // 每次打开都从第一张开始
+      modalImg.src = galleryImages[currentIndex];
+      modal.classList.add("active");
+      document.body.style.overflow = "hidden"; // 禁止背景滚动
+    });
+  }
 
-  // 关闭弹窗
-  closeBtn.addEventListener("click", () => modal.classList.remove("active"));
-  modal.addEventListener("click", (e) => e.target === modal && modal.classList.remove("active"));
+  // 5. 关闭弹窗
+  function closeModal() {
+    modal.classList.remove("active");
+    document.body.style.overflow = "auto";
+  }
 
-  // 上一张（修复后的计算逻辑）
-  prevBtn.addEventListener("click", () => {
-    currentImgIndex = (currentImgIndex - 1 + images.length) % images.length;
-    modalImg.src = images[currentImgIndex];
-  });
+  if (closeBtn) closeBtn.addEventListener("click", closeModal);
+  modal.addEventListener("click", (e) => e.target === modal && closeModal());
 
-  // 下一张（修复后的计算逻辑）
-  nextBtn.addEventListener("click", () => {
-    currentImgIndex = (currentImgIndex + 1) % images.length;
-    modalImg.src = images[currentImgIndex];
-  });
+  // 6. 切换图片逻辑
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+      modalImg.src = galleryImages[currentIndex];
+    });
+  }
 
-  // 键盘控制
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      currentIndex = (currentIndex + 1) % galleryImages.length;
+      modalImg.src = galleryImages[currentIndex];
+    });
+  }
+
+  // 7. 键盘控制
   document.addEventListener("keydown", (e) => {
     if (!modal.classList.contains("active")) return;
     if (e.key === "ArrowLeft") prevBtn.click();
     if (e.key === "ArrowRight") nextBtn.click();
-    if (e.key === "Escape") closeBtn.click();
+    if (e.key === "Escape") closeModal();
   });
 });
 </script>
