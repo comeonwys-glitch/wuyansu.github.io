@@ -428,23 +428,22 @@
   color: white;
   font-size: 40px;
   cursor: pointer;
-  padding: 0 20px;
+  padding: 15px; /* 扩大点击区域 */
   user-select: none;
+  background: rgba(0,0,0,0.5); /* 加半透明背景，更易识别 */
+  border-radius: 50%; /* 圆形按钮，更美观 */
+  z-index: 10000; /* 确保在图片上层 */
 }
 .modal-prev {
-  left: -60px;
+  left: 20px; /* 从-60px改为20px，显示在弹窗左侧 */
 }
 .modal-next {
-  right: -60px;
+  right: 20px; /* 从-60px改为20px，显示在弹窗右侧 */
 }
-/* 适配移动端 */
+/* 移动端保持不变 */
 @media (max-width: 768px) {
-  .modal-prev {
-    left: 0;
-  }
-  .modal-next {
-    right: 0;
-  }
+  .modal-prev { left: 10px; }
+  .modal-next { right: 10px; }
 }
 </style>
 
@@ -773,59 +772,53 @@
     </script>
     
     <script>
-// 替换成你所有素材图片的Raw链接
+// 确保数组里是3张不同的有效Raw链接
 const images = [
   "https://raw.githubusercontent.com/comeonwys-glitch/wuyansu.github.io/main/images/素材案例图集/集团分享.jpg",
   "https://raw.githubusercontent.com/comeonwys-glitch/wuyansu.github.io/main/images/素材案例图集/24年销冠证书.jpg",
   "https://raw.githubusercontent.com/comeonwys-glitch/wuyansu.github.io/main/images/素材案例图集/25年数字营销师-巨量千川（初级）.jpg"
-  // 继续添加更多图片...
 ];
 
 let currentImgIndex = 0;
-const modal = document.getElementById("imageModal");
-const modalImg = document.getElementById("modalImage");
-const openBtn = document.getElementById("open-gallery-btn");
-const closeBtn = document.getElementById("closeModal");
-const prevBtn = document.getElementById("prevImg");
-const nextBtn = document.getElementById("nextImg");
+// 等待页面完全加载后再绑定事件（解决找不到元素的问题）
+document.addEventListener("DOMContentLoaded", function() {
+  const modal = document.getElementById("imageModal");
+  const modalImg = document.getElementById("modalImage");
+  const openBtn = document.getElementById("open-gallery-btn");
+  const closeBtn = document.getElementById("closeModal");
+  const prevBtn = document.getElementById("prevImg");
+  const nextBtn = document.getElementById("nextImg");
 
-// 打开弹窗
-openBtn.addEventListener("click", () => {
-  currentImgIndex = 0;
-  modalImg.src = images[currentImgIndex];
-  modal.classList.add("active");
-});
+  // 打开弹窗（强制显示第一张）
+  openBtn.addEventListener("click", () => {
+    currentImgIndex = 0;
+    modalImg.src = images[currentImgIndex];
+    modal.classList.add("active");
+  });
 
-// 关闭弹窗
-closeBtn.addEventListener("click", () => {
-  modal.classList.remove("active");
-});
+  // 关闭弹窗
+  closeBtn.addEventListener("click", () => modal.classList.remove("active"));
+  modal.addEventListener("click", (e) => e.target === modal && modal.classList.remove("active"));
 
-// 点击弹窗外区域关闭
-modal.addEventListener("click", (e) => {
-  if (e.target === modal) {
-    modal.classList.remove("active");
-  }
-});
+  // 上一张（修复后的计算逻辑）
+  prevBtn.addEventListener("click", () => {
+    currentImgIndex = (currentImgIndex - 1 + images.length) % images.length;
+    modalImg.src = images[currentImgIndex];
+  });
 
-// 上一张图片
-prevBtn.addEventListener("click", () => {
-  currentImgIndex = (currentImgIndex - 1 + images.length) % images.length;
-  modalImg.src = images[currentImgIndex];
-});
+  // 下一张（修复后的计算逻辑）
+  nextBtn.addEventListener("click", () => {
+    currentImgIndex = (currentImgIndex + 1) % images.length;
+    modalImg.src = images[currentImgIndex];
+  });
 
-// 下一张图片
-nextBtn.addEventListener("click", () => {
-  currentImgIndex = (currentImgIndex + 1) % images.length;
-  modalImg.src = images[currentImgIndex];
-});
-
-// 键盘控制
-document.addEventListener("keydown", (e) => {
-  if (!modal.classList.contains("active")) return;
-  if (e.key === "ArrowLeft") prevBtn.click();
-  if (e.key === "ArrowRight") nextBtn.click();
-  if (e.key === "Escape") closeBtn.click();
+  // 键盘控制
+  document.addEventListener("keydown", (e) => {
+    if (!modal.classList.contains("active")) return;
+    if (e.key === "ArrowLeft") prevBtn.click();
+    if (e.key === "ArrowRight") nextBtn.click();
+    if (e.key === "Escape") closeBtn.click();
+  });
 });
 </script>
 </body>
