@@ -859,8 +859,76 @@
                 }
             });
         });
+        // ========== 述职报告弹窗逻辑 ==========
+const openReportBtn = document.getElementById("open-report-btn");
+const reportModal = document.getElementById("reportModal");
+const closeReportModal = document.getElementById("closeReportModal");
+const reportList = document.getElementById("reportList");
+
+// 报告列表数据（替换成你自己的PDF链接）
+const reportData = [
+  {
+    title: "2023年舜风集团述职报告",
+    url: "https://raw.githubusercontent.com/comeonwys-glitch/wuyansu.github.io/main/images/吴延苏23年述职报告.pdf"
+  },
+  {
+    title: "2024年舜风集团述职报告",
+    url: "https://raw.githubusercontent.com/comeonwys-glitch/wuyansu.github.io/main/images/吴延苏24年述职报告.pdf"
+  },
+  {
+    title: "2025年舜风集团述职报告",
+    url: "https://raw.githubusercontent.com/comeonwys-glitch/wuyansu.github.io/main/images/吴延苏25年述职报告.pdf"
+  }
+];
+
+// 打开弹窗，生成列表
+if (openReportBtn) {
+  openReportBtn.addEventListener("click", () => {
+    // 清空列表，重新生成
+    reportList.innerHTML = "";
+    // 循环生成每个报告的列表项
+    reportData.forEach(report => {
+      const item = document.createElement("div");
+      item.className = "report-item";
+      item.innerHTML = `
+        <div class="report-item-title">${report.title}</div>
+        <div class="report-item-btns">
+          <a href="https://docs.google.com/gview?url=${report.url}&embedded=true" target="_blank" class="report-btn view">在线查看</a>
+          <a href="${report.url}" download target="_blank" class="report-btn download">下载</a>
+        </div>
+      `;
+      reportList.appendChild(item);
+    });
+    // 显示弹窗
+    reportModal.classList.add("active");
+    document.body.style.overflow = "hidden";
+  });
+}
+
+// 关闭弹窗
+if (closeReportModal) {
+  closeReportModal.addEventListener("click", () => {
+    reportModal.classList.remove("active");
+    document.body.style.overflow = "auto";
+  });
+}
+
+// 点击弹窗外区域关闭
+reportModal.addEventListener("click", (e) => {
+  if (e.target === reportModal) {
+    reportModal.classList.remove("active");
+    document.body.style.overflow = "auto";
+  }
+});
+
+// 按ESC键关闭弹窗
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && reportModal.classList.contains("active")) {
+    reportModal.classList.remove("active");
+    document.body.style.overflow = "auto";
+  }
+});
     </script>
-    
    <script>
 // ========== 专属：素材案例图集弹窗逻辑 ==========
 // 1. 这里放你素材案例图集的3张图 Raw 链接
