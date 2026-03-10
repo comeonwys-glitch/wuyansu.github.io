@@ -445,6 +445,80 @@
   .modal-prev { left: 10px; }
   .modal-next { right: 10px; }
 }
+
+    /* 述职报告弹窗基础样式 */
+.report-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.9);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.report-modal.active {
+  display: flex;
+}
+.report-modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  background: white;
+  dark:bg-gray-800;
+  border-radius: 16px;
+  padding: 40px 30px;
+}
+.report-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: #333;
+  dark:text-white;
+  font-size: 30px;
+  cursor: pointer;
+  line-height: 1;
+}
+/* 报告列表项样式 */
+.report-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+  margin-bottom: 12px;
+  background: #f5f5f5;
+  dark:bg-gray-700;
+  border-radius: 8px;
+}
+.report-item-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  dark:text-white;
+}
+.report-item-btns {
+  display: flex;
+  gap: 12px;
+}
+.report-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+.report-btn.view {
+  background: #2563eb;
+  color: white;
+}
+.report-btn.download {
+  background: #10b981;
+  color: white;
+}
 </style>
 
         <!-- 工作经历区 -->
@@ -684,6 +758,20 @@
     <img class="modal-img" id="modalImage" src="">
   </div>
   <span class="modal-next" id="nextImg">&#10095;</span>
+</div>
+
+        <!-- 述职报告列表弹窗 -->
+<div class="report-modal" id="reportModal">
+  <div class="report-modal-content">
+    <!-- 关闭按钮 -->
+    <span class="report-modal-close" id="closeReportModal">&times;</span>
+    <!-- 弹窗标题 -->
+    <h3 class="text-2xl font-bold mb-6 text-center text-white">述职报告合集</h3>
+    <!-- 报告列表容器 -->
+    <div class="report-list" id="reportList">
+      <!-- JS会自动在这里生成报告列表 -->
+    </div>
+  </div>
 </div>
 
         <!-- 联系区 -->
