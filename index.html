@@ -929,7 +929,7 @@ document.addEventListener("keydown", (e) => {
     reportModal.classList.remove("active");
     document.body.style.overflow = "auto";
   }
-});
+});     
     </script>
    <script>
 // ========== 专属：素材案例图集弹窗逻辑 ==========
@@ -939,7 +939,74 @@ const galleryImages = [
   "https://raw.githubusercontent.com/comeonwys-glitch/wuyansu.github.io/refs/heads/main/images/24年销冠证书.jpg",
   "https://raw.githubusercontent.com/comeonwys-glitch/wuyansu.github.io/refs/heads/main/images/25年数字营销师-巨量千川（初级）.jpg"
 ];
+// ========== 工作分享+荣誉奖项 图片弹窗逻辑 ==========
+// 1. 工作分享图集链接（改这里的链接！）
+const workGalleryImages = [
+  "https://github.com/comeonwys-glitch/wuyansu.github.io/blob/main/images/25%E5%B9%B4%E6%95%B0%E5%AD%97%E8%90%A5%E9%94%80%E5%B8%88-%E5%B7%A8%E9%87%8F%E5%8D%83%E5%B7%9D%EF%BC%88%E5%88%9D%E7%BA%A7%EF%BC%89.png?raw=true",
+  "https://github.com/comeonwys-glitch/wuyansu.github.io/blob/main/images/25%E5%B9%B4%E6%95%B0%E5%AD%97%E8%90%A5%E9%94%80%E5%B8%88-%E8%90%A5%E9%94%80%E7%A7%91%E5%AD%A6%EF%BC%88%E5%88%9D%E7%BA%A7%EF%BC%89.png?raw=true"
+];
 
+// 2. 荣誉奖项图集链接（改这里的链接！）
+const awardGalleryImages = [
+  "https://github.com/comeonwys-glitch/wuyansu.github.io/blob/main/images/24%E5%B9%B4%E9%94%80%E5%86%A0%E8%AF%81%E4%B9%A6.jpg?raw=true",
+  "https://github.com/comeonwys-glitch/wuyansu.github.io/blob/main/images/25%E5%B9%B4%E5%8D%8A%E7%A8%8B%E9%94%80%E5%86%A0%E8%AF%81%E4%B9%A6.jpg?raw=true"
+];
+
+// 3. 下面的代码不用改！
+const openWorkGalleryBtn = document.getElementById("open-work-gallery-btn");
+const openAwardGalleryBtn = document.getElementById("open-award-gallery-btn");
+const imageModal = document.getElementById("imageModal");
+const modalImg = document.getElementById("modalImage");
+const prevBtn = document.getElementById("prevImg");
+const nextBtn = document.getElementById("nextImg");
+const closeBtn = document.getElementById("closeModal");
+
+let currentGallery = [];
+let currentImgIndex = 0;
+
+function initImageModal(images) {
+  currentGallery = images;
+  currentImgIndex = 0;
+  modalImg.src = currentGallery[currentImgIndex];
+  imageModal.classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+
+if (openWorkGalleryBtn) {
+  openWorkGalleryBtn.addEventListener("click", () => {
+    initImageModal(workGalleryImages);
+  });
+}
+
+if (openAwardGalleryBtn) {
+  openAwardGalleryBtn.addEventListener("click", () => {
+    initImageModal(awardGalleryImages);
+  });
+}
+
+// 复用素材案例的切换/关闭逻辑（如果素材案例已有，不用重复写！）
+prevBtn.addEventListener("click", () => {
+  currentImgIndex = (currentImgIndex - 1 + currentGallery.length) % currentGallery.length;
+  modalImg.src = currentGallery[currentImgIndex];
+});
+
+nextBtn.addEventListener("click", () => {
+  currentImgIndex = (currentImgIndex + 1) % currentGallery.length;
+  modalImg.src = currentGallery[currentImgIndex];
+});
+
+function closeImageModal() {
+  imageModal.classList.remove("active");
+  document.body.style.overflow = "auto";
+}
+closeBtn.addEventListener("click", closeImageModal);
+imageModal.addEventListener("click", (e) => {
+  if (e.target === imageModal) closeImageModal();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && imageModal.classList.contains("active")) closeImageModal();
+});
+// ========== 逻辑结束 ==========
 // 2. 等待页面加载完成
 document.addEventListener("DOMContentLoaded", function() {
   // 3. 获取页面元素（严格对应你HTML里的ID）
